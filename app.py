@@ -1,9 +1,4 @@
 from flask import Flask, render_template, request 
-from pymongo import MongoClient
-
-client = MongoClient()
-db = client.floconutpomade
-products = db.products
 
 app = Flask(__name__)
 
@@ -16,7 +11,12 @@ def home():
 @app.route('/products')
 def products():
     '''Show ALL products'''
-    return render_template('products.html', products=products.find())
+    products = [
+        {'name': 'Classic', 'price': 25.99, 'desp': 'Our classic flow'},
+        {'name': 'Medium', 'price': 29.99, 'desp': 'Medium'},
+        {'name': 'Locked In', 'price': 29.99, 'desp': 'Lock in your flow for a 24 hour hold'}
+    ]
+    return render_template('products.html', products=products)
 
 if __name__ == '__main__':
     app.run(debug=True)
