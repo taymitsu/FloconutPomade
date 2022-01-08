@@ -6,6 +6,13 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///products.db'
 db = SQLAlchemy(app)
 
+class User(db.Model):
+    id = db.Column(db.Integer(), primary_key=True) 
+    user = db.Column(db.String(length=30), nullable=False, unique=True)
+    email = db.Column(db.String(length=70), nullable=False, unique=True)
+    password = db.Column(db.String(length=60), nullable=False)
+
+
 class Product(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), nullable=False, unique=True)
