@@ -26,13 +26,17 @@ def products():
     #"""Sign into EXISTING account"""
     #return redirect('/account')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     """Create new account"""
     form = RegisterForm()
     if form.validate_on_submit():
-        user_to_create = User(username=form.username.data, email = form.email.data, password=form.password1.data)
-        db.session.add(user_to_create)
+        create_user = User(user=form.user.data, email=form.email.data, password=form.password1.data)
+        db.session.add(create_user)
         db.session.commit()
         return redirect(url_for('products'))
+    #handle input form errors
+    if form.errors != {}: 
+        for error_msg in form.errors.values():
+            print(f'Error: {error_msg}')
     return render_template('register.html', form=form)
