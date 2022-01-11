@@ -1,5 +1,5 @@
 from shop import app 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from shop.models import Product, User
 from shop.forms import RegisterForm
 from shop import db
@@ -38,5 +38,5 @@ def register():
     #handle input form errors
     if form.errors != {}: 
         for error_msg in form.errors.values():
-            print(f'Error: {error_msg}')
+            flash(f'Error: {error_msg}', category='danger')
     return render_template('register.html', form=form)

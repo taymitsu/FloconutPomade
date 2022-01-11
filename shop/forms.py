@@ -1,8 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import Length, EqualTo, Email, DataRequired
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
+from shop.models import User
 
 class RegisterForm(FlaskForm):
+    def validate_user(self, user_check):
+        username = User.query.filter_by(user=user_check.data).first()
+        if username:
+            raise ValidationError('Username Already Exists. Please enter a different username')
+    def validate_email(self, email_check):
+        email = User.query.filter_by(email=email_check.data).first()
+        if email:
+            raise ValidationError('Email Address Already Exists. Sign in!')
+
     user = StringField(label='User:', validators=[Length(min=5, max=30), DataRequired()])
     email = StringField(label='Email Address:', validators=[Email(), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired()])
