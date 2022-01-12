@@ -1,8 +1,9 @@
-from shop import app 
+from shop import app
 from flask import render_template, redirect, url_for, flash
 from shop.models import Product, User
-from shop.forms import RegisterForm
+from shop.forms import RegisterForm, LoginForm
 from shop import db
+from flask_login import login_user
 
 @app.route('/')
 @app.route('/home')
@@ -40,3 +41,17 @@ def register():
         for error_msg in form.errors.values():
             flash(f'Error: {error_msg}', category='danger')
     return render_template('register.html', form=form)
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    """Sign into Exisiting Account"""
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_attempt = User.query.filter_by(user=form.user.data).first()
+        if user_attempt and user_attempt.verify_password(password_attempt=form.password.data):
+            login_user(user_attempt)
+            flash('Welcome, {user_attempt.user}!', category='success')
+            return redirect(url_for('products'))
+        else:
+            flash('Username and password do not match! Please try again', category='danger')
+    return render_template('signin.html', form=form)

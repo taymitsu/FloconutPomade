@@ -13,8 +13,13 @@ class RegisterForm(FlaskForm):
         if email:
             raise ValidationError('Email Address Already Exists. Sign in!')
 
-    user = StringField(label='User:', validators=[Length(min=5, max=30), DataRequired()])
-    email = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired()])
-    password2 = PasswordField(label='Retype Password:', validators=[EqualTo('password1'), DataRequired()])
+    user = StringField(label='Username', validators=[Length(min=5, max=30), DataRequired()])
+    email = StringField(label='Email Address', validators=[Email(), DataRequired()])
+    password1 = PasswordField(label='Password', validators=[Length(min=8), DataRequired()])
+    password2 = PasswordField(label='Retype Password', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
+
+class LoginForm(FlaskForm):
+    user = StringField(label='Username', validators=[DataRequired()])
+    password = PasswordField(label='Password', validators=[DataRequired()])
+    submit = SubmitField(label='Sign in')
